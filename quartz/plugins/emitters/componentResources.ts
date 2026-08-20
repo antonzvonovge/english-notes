@@ -84,6 +84,19 @@ async function joinScripts(scripts: string[]): Promise<string> {
 function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentResources) {
   const cfg = ctx.cfg.configuration
 
+  // Absolute home: avoid relative root redirect nesting under SPA
+  componentResources.afterDOMLoaded.push(`
+    const HOME = "/english-notes/ielts/";
+    const fixHomeLinks = () => {
+      document.querySelectorAll("h2.page-title > a").forEach((a) => a.setAttribute("href", HOME));
+      document.querySelectorAll(".breadcrumb-element a").forEach((a) => {
+        if ((a.textContent || "").trim() === "Home") a.setAttribute("href", HOME);
+      });
+    };
+    fixHomeLinks();
+    document.addEventListener("nav", fixHomeLinks);
+  `)
+
   // popovers
   if (cfg.enablePopovers) {
     componentResources.afterDOMLoaded.push(popoverScript)
