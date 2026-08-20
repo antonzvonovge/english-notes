@@ -1,0 +1,82 @@
+name: Deploy English notes
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Poll private vault; no workflow files live in the vault itself
+    - cron: "*/30 * * * *"
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout English from private vault
+        uses: actions/checkout@v4
+        with:
+          repository: antonzvonovge/my-markspace
+          ref: master
+          token: ${{ secrets.VAULT_READ_TOKEN }}
+          sparse-checkout: |
+            English
+          sparse-checkout-cone-mode: true
+          path: vault
+
+      - name: Prepare content
+        run: |
+          set -euo pipefail
+          rm -rf content
+          mkdir -p content
+          cp -a vault/English/. content/
+          if [ -f content/.folder.md ]; then
+            mv content/.folder.md content/index.md
+          fi
+          find content -name '.folder.md' -delete
+          find content -name '*.mddict' -delete
+          if [ ! -f content/index.md ]; then
+            printf '%s\n' '---' 'title: English' '---' '' '# English' '' > content/index.md
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Quartz
+        run: npx quartz build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
