@@ -102,6 +102,37 @@ plugins:
     order: 92
   - source: "@quartz-community/quartz-fonts"
     enabled: true
+    options:
+      fontOrigin: googleFonts
+      useThemeFonts: false
+      header:
+        name: Onest
+        weights: [400, 600, 700]
+      body:
+        name: Literata
+        weights: [400, 600]
+        includeItalic: true
+      code:
+        name: JetBrains Mono
+        weights: [400, 600]
+      h1:
+        name: Onest
+        weights: [600, 700]
+      h2:
+        name: Onest
+        weights: [600, 700]
+      h3:
+        name: Onest
+        weights: [600, 700]
+      h4:
+        name: Onest
+        weights: [600, 700]
+      h5:
+        name: Onest
+        weights: [600, 700]
+      h6:
+        name: Onest
+        weights: [600, 700]
   - source: "@quartz-themes/core"
     enabled: false
     options:
