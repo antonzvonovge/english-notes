@@ -26,3 +26,60 @@
   font-size: 1.28rem;
   line-height: 1.4;
 }
+
+// Folder/list pages: tags under the title, small regular text
+li.section-li > .section {
+  display: grid;
+  grid-template-columns: fit-content(8em) 1fr;
+  column-gap: 0;
+  align-items: start;
+}
+
+li.section-li > .section > .tags {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.65rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0;
+}
+
+li.section-li > .section > .desc > .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.65rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0;
+}
+
+li.section-li > .section .tags > li {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+li.section-li > .section .tags .tag-link {
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-family: var(--bodyFont);
+  color: var(--gray);
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  line-height: 1.35;
+}
+
+li.section-li > .section .tags .tag-link:hover {
+  color: var(--secondary);
+  background: none;
+}
+
+@media all and (max-width: 600px) {
+  li.section-li > .section > .tags,
+  li.section-li > .section > .desc > .tags {
+    display: flex;
+  }
+}
