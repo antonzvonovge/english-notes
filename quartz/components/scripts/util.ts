@@ -33,7 +33,12 @@ export function removeAllChildren(node: HTMLElement) {
 const canonicalRegex = /<link rel="canonical" href="([^"]*)">/
 
 export async function fetchCanonical(url: URL): Promise<Response> {
-  const res = await fetch(`${url}`)
+  const bust = (u: URL) => {
+    const next = new URL(u)
+    next.searchParams.set("_ts", Date.now().toString())
+    return next
+  }
+  const res = await fetch(bust(url).toString(), { cache: "no-store" })
   if (!res.headers.get("content-type")?.startsWith("text/html")) {
     return res
   }
@@ -42,5 +47,7 @@ export async function fetchCanonical(url: URL): Promise<Response> {
   // to allow the caller to read it if it's was not a redirect
   const text = await res.clone().text()
   const [_, redirect] = text.match(canonicalRegex) ?? []
-  return redirect ? fetch(`${new URL(redirect, url)}`) : res
+  return redirect
+    ? fetch(bust(new URL(redirect, url)).toString(), { cache: "no-store" })
+    : res
 }
