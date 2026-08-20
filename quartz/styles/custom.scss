@@ -1,3 +1,28 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+// Reading-focused body size for note pages
+.page article {
+  font-size: 1.2rem;
+  line-height: 1.75;
+}
+
+.page article p,
+.page article li {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.page article h1 {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+.page article h2 {
+  font-size: 1.55rem;
+  line-height: 1.35;
+}
+
+.page article h3 {
+  font-size: 1.28rem;
+  line-height: 1.4;
+}
