@@ -32,7 +32,7 @@ jobs:
         with:
           repository: antonzvonovge/my-markspace
           ref: master
-          token: ${{ secrets.VAULT_READ_TOKEN }}
+          ssh-key: ${{ secrets.VAULT_SSH_KEY }}
           sparse-checkout: |
             English
           sparse-checkout-cone-mode: true
