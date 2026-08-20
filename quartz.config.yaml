@@ -12,9 +12,7 @@ configuration:
     - private
     - templates
     - .obsidian
-    - "**/.folder.md"
     - "**/*.mddict"
-    - .folder.md
     - "*.mddict"
   theme:
     fontOrigin: googleFonts

@@ -44,10 +44,11 @@ jobs:
           rm -rf content
           mkdir -p content
           cp -a vault/English/. content/
-          if [ -f content/.folder.md ]; then
-            mv content/.folder.md content/index.md
-          fi
-          find content -name '.folder.md' -delete
+          # MarkSpace folder notes → Quartz folder indexes
+          find content -name '.folder.md' -print0 | while IFS= read -r -d '' f; do
+            dest="$(dirname "$f")/index.md"
+            mv -f "$f" "$dest"
+          done
           find content -name '*.mddict' -delete
           if [ ! -f content/index.md ]; then
             printf '%s\n' '---' 'title: English' '---' '' '# English' '' > content/index.md
